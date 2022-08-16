@@ -1,0 +1,10 @@
+.vscode/
+cmake-build-debug/
+CMakeLists.txt
+.idea/
+
+# some small test
+test/
+build
+a.out
+
