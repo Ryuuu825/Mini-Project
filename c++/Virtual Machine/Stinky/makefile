@@ -1,5 +1,5 @@
 main: vm
-	g++ main.cpp ./build/vm/*.o && ./a.out
+	g++ main.cpp ./build/vm/*.o -std=c++11 && ./a.out ./test/2048.obj
 
 test: ./test/add.cpp vm
 	g++ ./test/add.cpp ./build/vm/*.o  && ./a.out

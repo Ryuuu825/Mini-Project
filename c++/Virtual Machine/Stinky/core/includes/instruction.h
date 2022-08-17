@@ -22,16 +22,6 @@ enum
     OP_TRAP    /* execute trap */
 };
 
-enum trap_code
-{
-    GETC = 0x20,
-    OUT = 0x21,
-    PUTS = 0x22,
-    IN = 0x23,      // get one char, with echoed onto stdOut
-    PUTSP = 0x24,   //  out a byte string
-    HALT = 0x25
-};
-
 
 uint16_t sign_extend(uint16_t x, int bit_count);
 void update_flag(u16 reg);

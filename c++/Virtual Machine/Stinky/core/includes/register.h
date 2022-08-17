@@ -1,3 +1,7 @@
+#pragma once 
+#ifndef REGISTER_H
+#define REGISTER_H
+
 #include <stdint.h>
 #define u16 uint16_t
 
@@ -24,3 +28,5 @@ enum
     FL_ZRO = 1 << 1, /* Z -> 2 */
     FL_NEG = 1 << 2, /* N -> 4 */
 };
+
+#endif

@@ -168,10 +168,7 @@ void jump(u16 instruction)
     
     reg[R_COUNT] = reg[loc];
 
-#ifdef Debug
-    printf("[\033[1;31mJMP\033[0m] Instruction: 0x%hu | Jmmp to %hu\n",
-              instruction , reg[R_COUNT]);
-#endif
+
 }
 
 /**
@@ -225,6 +222,15 @@ void load(u16 instruction)
 //     u16 offset = sign_extend(instruction & 0x1FF , 9);
 //     mem_write( destination_register , mem_read(reg[R_PC] + offset));
 // }
+
+void lea(u16 instruction)
+{
+    extern u16 reg[16];
+    u16 destination = (instruction >> 9) & 0b111;
+    u16 offset = sign_extend(instruction & 0x1FF , 9);
+    reg[destination] = reg[R_COUNT] + offset;
+}
+
 
 void store(u16 instruction)
 {
