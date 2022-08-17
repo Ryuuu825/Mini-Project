@@ -1,0 +1,82 @@
+// stack 
+var a : const str = "a" // fixed size string
+var b : const int = 10 
+arr c : const int[10] = [1,2,3,4,5,6,7,8,9,10]
+var d : int = c[0]
+ref e : int = &d 
+cref f : int = &c[0] // const reference of an int 
+cref g : const int = &c[0] // const reference of a const int
+
+// heap 
+heapd h : int = 10 // auto delete when out of scope 
+heapm i : int = 10 // manual delete
+delete i // manual delete
+
+// compiletime var
+    const #c = 10
+    var #d = 10
+    #d ++ 
+    
+// ecompiletime
+
+#Debug  
+#end 
+
+#Release
+#end
+
+if a is str { // check the type of a
+    seeout a 
+    seeout b , c
+}
+elif a == "10" {
+    see b // print to default output stream 
+}
+else {
+    seeerr "not a str"
+}
+
+struct Point [x:int = 0 , y :int = 1]
+
+var p : Point = {1,1}
+var p : Point? = {1,1} // optional point
+var p : Point? = null // is a point object or null object 
+var p : Point = null // uninitialized point object
+
+struct Person [
+    name :str = "",
+    age :int = 0,
+]
+
+struct Student : Person [
+    id :int = 0,
+    grade :int = 0,
+]
+
+extension Person [
+    public saySth (self , msg : str ) : void
+    {
+        seeout msg
+    }
+
+    private sayHello (self) : void
+    {
+        self.saySth("hello")
+    }
+
+    - public sayHello (self) : void
+    {
+        self.saySth("hello")
+    }
+]
+
+
+@marco compile_time_macro (x : int) : int
+{
+    return x * x
+}
+
+%marco run_time_macro (x : int) : int
+{
+    return x * x
+}

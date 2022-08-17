@@ -1,0 +1,2 @@
+fflang <filename> <Debug / Release>  <output_path (optional)> 
+    e.g. fflang test.ff Debug ./build/test.bc 
