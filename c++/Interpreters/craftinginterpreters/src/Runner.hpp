@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "common.hpp"
+#include "Scanner.hpp"
 #include <optional>
 
 
@@ -11,6 +12,7 @@ class Runner {
         static void run_prompt();
         static void run_line(const char* line);
         static void halt(const int exit_code);
+        static void halt(const char* msg, const int exit_code);
 
 
     private: 
@@ -20,4 +22,6 @@ class Runner {
         static void error(const char* message , const int exit_code);
         static void error(const std::string& message , const int exit_code);
         static bool is_error;
+        static Scanner scanner;
+        static std::string source;
 };

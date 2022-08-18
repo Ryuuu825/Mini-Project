@@ -2,22 +2,21 @@
 var a : const str = "a" // fixed size string
 var b : const int = 10 
 arr c : const int[10] = [1,2,3,4,5,6,7,8,9,10]
+tup c : const int[10] = (1,2,3,4,5,6,7,8,9,10)
 var d : int = c[0]
 ref e : int = &d 
 cref f : int = &c[0] // const reference of an int 
 cref g : const int = &c[0] // const reference of a const int
+move h : int = d // move d value to h , and d is not longer valid
+move i : const int = d // move d value to i , and d is not longer valid
+move j : int = &d // invalide move. program halt 
+pubvar k : int = 10 // public variable
+
 
 // heap 
-heapd h : int = 10 // auto delete when out of scope 
 heapm i : int = 10 // manual delete
 delete i // manual delete
 
-// compiletime var
-    const #c = 10
-    var #d = 10
-    #d ++ 
-    
-// ecompiletime
 
 #Debug  
 #end 
@@ -54,29 +53,31 @@ struct Student : Person [
 ]
 
 extension Person [
-    public saySth (self , msg : str ) : void
+    public saySth ([self] , msg : str ) : void
     {
         seeout msg
     }
 
-    private sayHello (self) : void
+    private sayHello ([self]) : void
     {
-        self.saySth("hello")
+        Person.saySth(self , "hello")
     }
 
-    - public sayHello (self) : void
-    {
-        self.saySth("hello")
-    }
 ]
 
+var p : Person = {"name" , 18}
+Person.saySth(p , "hello")
 
-@marco compile_time_macro (x : int) : int
-{
-    return x * x
-}
 
 %marco run_time_macro (x : int) : int
 {
     return x * x
 }
+
+true
+false 
+
+true && false 
+true || false
+!true
+
