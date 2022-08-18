@@ -14,7 +14,7 @@ pubvar k : int = 10 // public variable
 
 
 // heap 
-heapm i : int = 10 // manual delete
+heapm i : int = 10 
 delete i // manual delete
 
 
@@ -81,3 +81,8 @@ true && false
 true || false
 !true
 
+var a : int = try! 10 // if try is success , return value , else throw exception
+var a : int = try? 10 // if try is success , return value , else return null
+var a : int = try! 10 catch ( e : Exception ) {
+    seeerr Exception.error(e)
+}
