@@ -81,7 +81,10 @@ std::vector<Token> Scanner::rescan(const char* source)
 std::vector<Token> Scanner::append_scan(const char* source) 
 {
     this->source += source;
-    this->scan_token();
+    while(!this->is_at_end())
+    {
+        this->scan_token();
+    }
     return this->scanned_token;
 }
 
@@ -168,10 +171,10 @@ void Scanner::set_source(std::string source)
 }
 
 
-const char Scanner::peek() const  {
+char Scanner::peek() const  {
     return this->source[this->current_pos + 1];
 }
-const char Scanner::peek(int index) const  {
+char Scanner::peek(int index) const  {
     return this->source[this->current_pos + index];
 }
 
@@ -225,6 +228,11 @@ void Scanner::scan_token()
         {
             std::string string = this->scan_string();
             add_token(TokenType::STRING, string);
+            break;
+        }
+        case ':':
+        {
+            add_token(TokenType::COLON);
             break;
         }
         default: 

@@ -24,8 +24,8 @@ class Scanner
         std::string scan_identifier();
 
 
-        const char peek() const; // peek the next char
-        const char peek(int index) const; // peek the next char
+        char peek() const; // peek the next char
+        char peek(int index) const; // peek the next char
         
         void set_source(const char* source);
         void set_source(std::string source);

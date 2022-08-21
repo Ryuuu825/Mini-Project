@@ -1,27 +1,31 @@
 // stack 
-var a : const str = "a" // fixed size string
-var b : const int = 10 
-arr c : const int[10] = [1,2,3,4,5,6,7,8,9,10] // array
-tup c : const int[10] = (1,2,3,4,5,6,7,8,9,10) // tuple
-var d : int = c[0]
-ref e : int = &d // const reference of an int 
-ref f : int = &c[0] // const reference of an int 
-mref g : int = &d // mutable reference of a const int
-move h : int = d // move d value to h , and d is not longer valid
-move i : const int = d // move d value to i , and d is not longer valid
-move j : int = &d // invalide move. program halt 
-golvar k : int = 10 // golbal variable
-svar l : int = 10 // static / private file scope variable
+var a : str = "a" // fixed size string
+var b : int = 10 
+arr c : int[10] = [1,2,3,4,5,6,7,8,9,10] // array
+tup c : int[10] = (1,2,3,4,5,6,7,8,9,10) // tuple
+var d : mut int = c[0]
+ref e : mut int = &d // const reference of an int 
+ref f : mut int = &c[0] // const reference of an int 
+mref g : mut int = &d // mutable reference of a const int
+move h : mut int = d // move d value to h , and d is not longer valid
+move i : int = d // move d value to i , and d is not longer valid
+move j : mut int = &d // invalide move. program halt 
+golvar k : mut int = 10 // golbal variable
+svar l : mut int = 10 // static / private file scope variable
 let m : auto = 10 // auto type inference
-let n : int = 10 // explicit type
+let n : mut int = 10 // explicit type
+var a , b : int = 10 // multiple assignment
 
 // heap 
 heap i : Object = & ( create Object {} ) // create an object on the heap
 delete i // manual delete
 
 
-heap j : InputStream = & ( create InputStream { file: stddef::IN } ) // create an input stream on the heap
-
+heap j : InputStream = & ( create InputStream { file = stddef::stdin } ) // create an input stream on the heap
+let input : mut String = InputStream.readline(j) // read from the stream
+seeout input 
+InputStream.close(j) // close the stream
+delete j // manual delete
 
 #Debug  
 #end 
@@ -62,17 +66,39 @@ struct Student : Person [
 ]
 
 extension Person [
-    public saySth ([self] , ref msg : str ) : void
+    fn public saySth ( [self] , ref msg : str ) : void
     {
         seeout msg
     }
 
-    private sayHello ([self]) : void
+    fn private sayHello ( [self]) : void
     {
         Person.saySth(self , "hello")
     }
+] 
 
-]
+
+fn add(var x : int , var y : int ) : int
+{
+    return x + y
+}
+
+fn get_var_from_array(ref arr : const int[10] , var index : int ) : int
+{
+    return arr[index]
+}
+
+fn add_one_to_each_element(mref arr : const int[10] ) : void
+{
+    for i in 0..10 {
+        arr[i] += 1
+    }
+}
+
+fn movevaluetothisfunction(move x : int ) : void
+{
+    seeout x
+} // x is not valid anymore
 
 var p : Person = {"name" , 18}
 Person.saySth(p , "hello")
@@ -113,6 +139,7 @@ throw create Exception {
 typeof(p) 
 nameof(p)
 sizeof(p)
+lenof(p)
 
 
 let a : Person = {
@@ -126,6 +153,18 @@ while(true) {
 }
 
 for i in 10..20 {
+    seeout i
+}
+
+for i in lenof(p) {
+    seeout i
+}
+
+foreach element in p {
+    seeout element
+}
+
+for i in 10..20 |+10| {
     seeout i
 }
 

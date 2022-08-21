@@ -1,7 +1,7 @@
 #include "Runner.hpp"
 #include "fflang_def.hpp"
 #include "Scanner.hpp"
-#include "./terminal_utils/color.hpp"
+#include "terminal_utils/color.hpp"
 
 using Terinal_Utils::Color;
 
