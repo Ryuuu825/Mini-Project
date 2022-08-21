@@ -3,6 +3,8 @@
 #include "common.hpp"
 #include "Token.hpp"
 
+#include <map>
+
 class Scanner
 {
     public:
@@ -12,18 +14,28 @@ class Scanner
         ~Scanner();
         
         // start to scan the source
-        std::vector<Token::Type> start_scan() ;
-        std::vector<Token::Type> rescan(const char* source) ;
-        std::vector<Token::Type> append_scan(const char* source) ;
-        std::vector<Token::Type> get_scanned_tokens();
+        std::vector<Token> start_scan() ;
+        std::vector<Token> rescan(const char* source) ;
+        std::vector<Token> append_scan(const char* source) ;
+        std::vector<Token> get_scanned_tokens();
+
+        std::string scan_string();
+        std::string scan_number();
+        std::string scan_identifier();
+
+
+        const char peek() const; // peek the next char
+        const char peek(int index) const; // peek the next char
         
         void set_source(const char* source);
         void set_source(std::string source);
 
+        void print_debug_info();
 
     private:
         std::string source;
-        std::vector<Token::Type> scanned_token;
+        std::vector<Token> scanned_token;
+        static std::map<std::string, TokenType> keywords;
 
         // state 
         unsigned long current_line = 0;
@@ -35,16 +47,18 @@ class Scanner
         std::string current_token;
 
         // method
-        bool is_at_end() const;
-        void add_token(const Token::Type& token_type);
-        void scan_token();
         char advance();
+        bool is_at_end() const;
         bool match(const char& expected);
-        bool is_at_end();
 
-        #ifdef DEBUG
+        void add_token(const TokenType& token_type);
+        void add_token(const TokenType& token_type, const std::string& literal);
+        void scan_token();
+        
+        void clear_state();
 
-            void print_debug_info();
+        bool is_digit(char c) const;
+        bool is_identifier() const;
+        bool is_alpha(char c) const;
 
-        #endif
 };

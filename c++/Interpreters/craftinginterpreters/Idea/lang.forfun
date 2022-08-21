@@ -1,21 +1,26 @@
 // stack 
 var a : const str = "a" // fixed size string
 var b : const int = 10 
-arr c : const int[10] = [1,2,3,4,5,6,7,8,9,10]
-tup c : const int[10] = (1,2,3,4,5,6,7,8,9,10)
+arr c : const int[10] = [1,2,3,4,5,6,7,8,9,10] // array
+tup c : const int[10] = (1,2,3,4,5,6,7,8,9,10) // tuple
 var d : int = c[0]
-ref e : int = &d 
-cref f : int = &c[0] // const reference of an int 
-cref g : const int = &c[0] // const reference of a const int
+ref e : int = &d // const reference of an int 
+ref f : int = &c[0] // const reference of an int 
+mref g : int = &d // mutable reference of a const int
 move h : int = d // move d value to h , and d is not longer valid
 move i : const int = d // move d value to i , and d is not longer valid
 move j : int = &d // invalide move. program halt 
-pubvar k : int = 10 // public variable
-
+golvar k : int = 10 // golbal variable
+svar l : int = 10 // static / private file scope variable
+let m : auto = 10 // auto type inference
+let n : int = 10 // explicit type
 
 // heap 
-heapm i : int = 10 
+heap i : Object = & ( create Object {} ) // create an object on the heap
 delete i // manual delete
+
+
+heap j : InputStream = & ( create InputStream { file: stddef::IN } ) // create an input stream on the heap
 
 
 #Debug  
@@ -36,11 +41,15 @@ else {
 }
 
 struct Point [x:int = 0 , y :int = 1]
+enum Color : Integer {
+    Red = 1,
+    Green = 2,
+    Blue = 
+}
 
-var p : Point = {1,1}
-var p : Point? = {1,1} // optional point
+var p : Point = create Point {x:1,y:2}
+var p : Point? = create Point {x:1,y:2} // optional point
 var p : Point? = null // is a point object or null object 
-var p : Point = null // uninitialized point object
 
 struct Person [
     name :str = "",
@@ -53,7 +62,7 @@ struct Student : Person [
 ]
 
 extension Person [
-    public saySth ([self] , msg : str ) : void
+    public saySth ([self] , ref msg : str ) : void
     {
         seeout msg
     }
@@ -69,10 +78,8 @@ var p : Person = {"name" , 18}
 Person.saySth(p , "hello")
 
 
-%marco run_time_macro (x : int) : int
-{
-    return x * x
-}
+%marco run_time_macro (x) `seeout {x}`
+%run_time_macro(10)
 
 true
 false 
@@ -85,4 +92,43 @@ var a : int = try! 10 // if try is success , return value , else throw exception
 var a : int = try? 10 // if try is success , return value , else return null
 var a : int = try! 10 catch ( e : Exception ) {
     seeerr Exception.error(e)
+    return 0
+}
+
+#import <io.ff>
+#import "test.ff"
+
+seeout f"{a : i , l10}"
+
+namespace test {
+    struct Point [x:int = 0 , y :int = 1]
+}
+
+var p : test::Point = {1,1}
+
+throw create Exception {
+    error = "error"
+}
+
+typeof(p) 
+nameof(p)
+sizeof(p)
+
+
+let a : Person = {
+    let a = create Person {name:"a",age:10}
+    Person.say_hello(a)
+    return a
+}
+
+while(true) {
+    seeout "hello"
+}
+
+for i in 10..20 {
+    seeout i
+}
+
+for (i = 10 ; i < 20 ; i++) {
+    seeout i
 }
