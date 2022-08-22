@@ -1,0 +1,4 @@
+var a : int = 10
+let c : mut str = "123"
+
+seeout c 
