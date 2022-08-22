@@ -57,6 +57,13 @@ std::vector<Token> Scanner::get_scanned_tokens()
     return this->scanned_token;
 }
 
+#ifdef TEST
+int Scanner::get_token_num()
+{
+    return this->scanned_token.size();
+}
+#endif
+
 void Scanner::clear_state()
 {
     this->current_line = 0;

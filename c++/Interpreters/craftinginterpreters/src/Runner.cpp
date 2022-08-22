@@ -6,7 +6,6 @@
 
 using Terinal_Utils::Color;
 
-
 Scanner Runner::scanner = Scanner();
 bool Runner::is_error = false;
 
@@ -34,6 +33,7 @@ void Runner::run_prompt()
 
 void Runner::run_file(const char* filename)
 {
+    Runner::clear();
     std::ifstream file(filename);
     assert(file.is_open() && file.good());
 
@@ -44,7 +44,11 @@ void Runner::run_file(const char* filename)
         std::getline(file , line);
         run_line(line.c_str());
     }
-    scanner.print_debug_info();
+    #ifndef TEST
+    #ifdef DEBUG
+        scanner.print_debug_info();
+    #endif
+    #endif
 }
 
 
@@ -90,5 +94,20 @@ void Runner::halt(const char* msg , const int exit_code)
     exit(exit_code);
 }
 
+bool Runner::has_error()
+{
+    return is_error;
+}
 
- 
+#ifdef TEST
+int Runner::get_token_num()
+{
+    return scanner.get_token_num();
+}
+#endif
+
+
+void Runner::clear()
+{
+    scanner.clear_state();
+}

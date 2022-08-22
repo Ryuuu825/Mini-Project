@@ -17,8 +17,13 @@ class Runner {
         static void error(const int line, const int row, const char* message);
         static void fatal_error(const char* message , const int exit_code);
         static void fatal_error(const std::string& message , const int exit_code);
+        static bool has_error();
 
+        static void clear();
 
+        #ifdef TEST
+            static int get_token_num();
+        #endif
 
     private: 
         Runner();

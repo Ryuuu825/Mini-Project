@@ -1,8 +1,6 @@
 #define DEBUG
 #include "includes/Runner.hpp"
 
-
-
 int main(int argc, char* argv[])
 {
     if (argc == 1)

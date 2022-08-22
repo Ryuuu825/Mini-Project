@@ -2,7 +2,6 @@
 
 #include "common.hpp"
 #include "Token.hpp"
-
 #include <map>
 
 class Scanner
@@ -32,6 +31,11 @@ class Scanner
 
         void print_debug_info();
 
+        void clear_state();
+
+        #ifdef TEST
+            int get_token_num();
+        #endif
     private:
         std::string source;
         std::vector<Token> scanned_token;
@@ -55,7 +59,6 @@ class Scanner
         void add_token(const TokenType& token_type, const std::string& literal);
         void scan_token();
         
-        void clear_state();
 
         bool is_digit(char c) const;
         bool is_identifier() const;
