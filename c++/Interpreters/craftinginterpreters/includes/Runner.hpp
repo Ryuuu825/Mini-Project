@@ -29,4 +29,6 @@ class Runner {
 
         static Scanner scanner;
         static std::string source;
+
+        static bool is_error;
 };

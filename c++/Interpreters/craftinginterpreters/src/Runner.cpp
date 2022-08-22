@@ -2,11 +2,13 @@
 #include "fflang_def.hpp"
 #include "Scanner.hpp"
 #include "terminal_utils/color.hpp"
+#include "expr/BinaryExpr.hpp"
 
 using Terinal_Utils::Color;
 
 
 Scanner Runner::scanner = Scanner();
+bool Runner::is_error = false;
 
 // method
 void Runner::run_prompt()
@@ -37,14 +39,12 @@ void Runner::run_file(const char* filename)
 
     std::string line; 
 
-    while (file.good())
+    while (file.good() && !is_error)
     {
         std::getline(file , line);
-        std::cout << line << "\n";
+        run_line(line.c_str());
     }
-
-    scanner.set_source(line);
-    std::vector<Token> tokens = scanner.start_scan();
+    scanner.print_debug_info();
 }
 
 

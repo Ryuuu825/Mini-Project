@@ -1,0 +1,30 @@
+@export as "Collection.Vector" => {
+
+    namespace Collection {
+            struct Vector<T> [
+                let size : size_t = 0,
+                let capacity : size_t = 0,
+                arr data : mut T[] = default,
+            ]
+
+            extension Vector<T> {
+                fn pub new() -> ref : mut Vector<T> {
+                    heap new_obj : mut Vector<T> = &(create Vector {
+                        size: 0,
+                        capacity: 0,
+                        data: [],
+                    })
+                }
+
+                fn pub push_back([self] , [ref , var] value : T) -> void {
+                    if self.size == self.capacity {
+                        Vector.reserve(self , self.capacity * 2);
+                    }
+                    self.data[self.size] = value;
+                    self.size += 1;
+                }
+            }
+        }
+    }
+        
+}

@@ -9,7 +9,7 @@ main:=./$(app).cpp
 main:  interpeter
 	$(CC) $(CFLAGS) $(main) $(objfiles)  -o fflang
 
-interpeter: ./src/*.cpp
+interpeter: clean ./src/*.cpp
 	$(CC) $(CFLAGS) -c $(cppfiles) 
 	mkdir -p $(builddir)
 	mv *.o $(builddir)

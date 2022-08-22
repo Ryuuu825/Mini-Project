@@ -274,11 +274,7 @@ std::string Scanner::scan_string()
         string += c;
         // if we call advance() here
         // it will return "
-
-        if (is_at_end()) {
-            Runner::error("Unterminated string");
-            return "";
-        }
+        advance();
         return string;
     }
    

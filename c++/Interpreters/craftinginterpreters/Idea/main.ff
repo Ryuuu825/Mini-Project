@@ -1,0 +1,13 @@
+@use ["Collection.Vector" , "Collection.Array"] from <Collection>
+@use ["System.Command"] from <System>
+
+fn main(var argc : int , arr argv : const str ) -> void {
+    let my_vector : mut Vector<str> = create Vector { data = Array.convert_to_array(argv)};
+    foreach element in my_vector.data {
+        seeout element , "\n";
+    }
+
+    let my_command : mut Command = create Command {"echo 1"};
+    System::Command.execute(my_command);
+
+}
