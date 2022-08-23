@@ -1,6 +1,6 @@
 TESTFILE := $(wildcard *.cpp)
 # suspend all the warnings
-CLANG_WARNINGS_OFF := -w
+CLANG_WARNINGS_OFF := -w -I../../includes -std=c++20
 
 all: $(TESTFILE)
 	@for file in $(TESTFILE); do \

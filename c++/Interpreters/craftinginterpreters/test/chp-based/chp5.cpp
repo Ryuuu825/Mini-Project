@@ -1,8 +1,11 @@
 #define TEST
 #include "../test_script.hpp"
+#include "expr/Expr.hpp"
+#include "expr/alltypes.hpp"
 #include <iostream>
+#include <memory>
 
-
+typedef std::variant<null_t, int, double, std::string> object_t;
 void test_token_num(const char* file , int expected)
 {
     
@@ -13,8 +16,10 @@ void test_token_num(const char* file , int expected)
 
 int main(void)
 {
-    test_has_error("./chp4.ff" , false);
-    test_token_num("./chp4.ff" , 15);
+    //fflang::LiteralExpr e = {1};
+    auto ex = std::make_unique<fflang::LiteralExpr>(null_t());
+    fflang::Expr::Vistor vistor = fflang::Expr::Vistor();
+    ex->accept(vistor);
     return 0;
 }
 

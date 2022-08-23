@@ -1,14 +1,17 @@
 #pragma once 
 
 #include <string>
+#include <variant>
 
-class Object 
+
+class null_t
 {
-    public:
-        Object();
-        ~Object();
-
-        virtual std::string to_string() const;
-        std::string class_name = "Object";
-
+    template<typename T>
+	bool operator==( T const& rhs ) const
+	{
+		return typeof(rhs) == typeid(null_t);
+	}
+	
 };
+
+typedef std::variant<null_t, int, double, std::string> object_t;

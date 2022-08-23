@@ -28,3 +28,9 @@ var imm_name : String = "John"
 // create object 
 var obj : mut Object = create Object {} 
 var p : Person = create Person {name = "John", age = 30}
+
+
+// maybe? idk if i can do this
+var eval_value : int = {
+    return b ? 1 : 0
+}
