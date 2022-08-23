@@ -1,0 +1,25 @@
+{
+  "name": "ff",
+  "displayName": "fflang",
+  "description": "fflang Programming language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "ff",
+      "aliases": ["fflang", "ff"],
+      "extensions": [".ff"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "ff",
+      "scopeName": "source.ff",
+      "path": "./syntaxes/ff.tmLanguage.json"
+    }]
+  }
+}

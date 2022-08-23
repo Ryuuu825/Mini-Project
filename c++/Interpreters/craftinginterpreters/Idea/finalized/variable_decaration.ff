@@ -3,6 +3,7 @@ var name : str = "John"
 ref name_ref : str = & name 
 arr array : str[10] = ["John", "Paul", "George", "Ringo"]
 glovar global : str = "Global"
+let can_change_type : str = "abc"
 
 // primitives data types
 var i : int = 1
@@ -12,6 +13,9 @@ var b : bool = true
 var c : char = 'a'
 var s : str = "string"
 arr arr : int[10] = [1,2,3,4,5,6,7,8,9,10]
+
+// nullable 
+let can_null : str? = nil
 
 // mutable 
 var mut_name : mut str = "John"

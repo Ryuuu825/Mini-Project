@@ -1,0 +1,4 @@
+fn hello_world (ref input_str : String ) : void {
+    see input_str 
+}
+
