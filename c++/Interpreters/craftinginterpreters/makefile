@@ -1,6 +1,6 @@
 CC:=g++
 CFLAGS:=-Wall -Wextra -Werror -std=c++17 -O2 -g -I./includes -DDebug -DTEST
-cppfiles:=./src/**/*.cpp
+cppfiles:=./src/**/*.cpp ./src/*.cpp
 builddir:=./build/interpeter
 objfiles:=$(builddir)/*.o
 app:=fflang

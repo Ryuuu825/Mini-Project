@@ -12,7 +12,8 @@ namespace fflang {
         public:
             LiteralExpr(const object_t& obj);
             ~LiteralExpr() = default  ;
-            void accept(Expr::Vistor& vistor) override ;
+            void accept(Vistor& vistor) const ;
+
 
             const object_t value; 
 

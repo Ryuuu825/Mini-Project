@@ -4,7 +4,7 @@
 #include <variant>
 
 
-class null_t
+typedef struct null_t
 {
     template<typename T>
 	bool operator==( T const& rhs ) const
@@ -12,6 +12,6 @@ class null_t
 		return typeof(rhs) == typeid(null_t);
 	}
 	
-};
+} null_t;
 
 typedef std::variant<null_t, int, double, std::string> object_t;

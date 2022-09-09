@@ -12,7 +12,7 @@ namespace fflang {
                 : lhs(std::move(lhs))  , rhs(std::move(rhs)) , token(token) {};
             ~BinaryExpr()  = default;
 
-            void accept(Expr::Vistor& vistor) override ;
+            void accept(Expr::Vistor& vistor) const  ;
 
             const std::unique_ptr<Expr> lhs;
             const std::unique_ptr<Expr> rhs;

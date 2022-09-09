@@ -26,8 +26,9 @@ ref mut_name_ref : mut String = & mut_name
 var imm_name : String = "John"
 
 // create object 
-var obj : mut Object = create Object {} 
+var obj : mut Object = create Object 
 var p : Person = create Person {name = "John", age = 30}
+delete p 
 
 
 // maybe? idk if i can do this

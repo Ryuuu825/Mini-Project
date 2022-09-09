@@ -14,7 +14,7 @@ namespace fflang {
                 : token(token) , expr(std::move(expr)) {}; 
             ~UnaryExpr()  = default ;
 
-            void accept(Expr::Vistor& vistor) override ;
+            void accept(Expr::Vistor& vistor) const  ;
 
             const Token token;
             const std::unique_ptr<Expr> expr;

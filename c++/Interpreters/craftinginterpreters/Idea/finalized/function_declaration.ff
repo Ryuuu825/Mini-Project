@@ -2,3 +2,21 @@ fn hello_world (ref input_str : String ) : void {
     see input_str 
 }
 
+hello_world(refof create String{""} ) 
+
+extension String {
+    fn see_if_true ( [self] , var is_true : bool = True) {
+        if is_true {
+            see self 
+        }
+    }
+}
+
+struct Arg [
+    var counter : int = 0
+    arr argv : str[?] 
+]
+
+fn main (ref arg : Arg ) {
+    "Hello World".see_if_true() 
+}

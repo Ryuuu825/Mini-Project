@@ -12,7 +12,7 @@ namespace fflang {
                 : expre(expr) {};
             ~GroupingExpr()   = default ;
 
-            void accept(Expr::Vistor& vistor) override ;
+            void accept(Expr::Vistor& vistor) const  ;
 
             const std::shared_ptr<Expr> expre;
     };

@@ -1,5 +1,7 @@
 #pragma once 
 
+#include <vector>
+
 namespace fflang {
     class BinaryExpr;
     class UnaryExpr;
@@ -9,7 +11,6 @@ namespace fflang {
 
     class Expr {
         public:
-            virtual ~Expr() = default;
         
             class Vistor {
                 // vistor is a visitor pattern
@@ -18,13 +19,13 @@ namespace fflang {
 
                 public:
                     ~Vistor() = default;
-                    void visit_binary(const BinaryExpr& expr);
-                    void visit_unary(const UnaryExpr& expr);
-                    void visit_literal(const LiteralExpr& expr);
-                    void visit_grouping(const GroupingExpr& expr);
+                    virtual void visit_binary(const BinaryExpr& expr) = 0 ;
+                    virtual void visit_unary(const UnaryExpr& expr) = 0 ;
+                    virtual void visit_literal(const LiteralExpr& expr) = 0 ;
+                    virtual void visit_grouping(const GroupingExpr& expr) = 0 ;
+                    virtual void paranthesise(const std::string& name, std::initializer_list<const Expr> exprs) = 0;
             };
 
-            virtual void accept(Vistor& vistor) = 0;
-
+            virtual void accept(Vistor& vistor) const;
     }; 
 };
