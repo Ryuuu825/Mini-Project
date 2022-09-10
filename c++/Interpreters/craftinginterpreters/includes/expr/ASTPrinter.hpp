@@ -11,6 +11,5 @@ namespace fflang {
             void visit_literal(const LiteralExpr& expr) override;
             void visit_grouping(const GroupingExpr& expr) override;
             void paranthesise(const std::string& name, std::initializer_list<const Expr> exprs) override;
-            
     };
 };

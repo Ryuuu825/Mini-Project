@@ -8,14 +8,14 @@
 namespace fflang {
     class BinaryExpr : public Expr {
         public:
-            BinaryExpr(std::unique_ptr<Expr> lhs, const Token& token,  std::unique_ptr<Expr>rhs) 
+            BinaryExpr(std::shared_ptr<Expr> lhs, const Token& token,  std::shared_ptr<Expr>rhs) 
                 : lhs(std::move(lhs))  , rhs(std::move(rhs)) , token(token) {};
             ~BinaryExpr()  = default;
 
             void accept(Expr::Vistor& vistor) const  ;
 
-            const std::unique_ptr<Expr> lhs;
-            const std::unique_ptr<Expr> rhs;
+            const std::shared_ptr<Expr> lhs;
+            const std::shared_ptr<Expr> rhs;
             const Token token;
 
     };

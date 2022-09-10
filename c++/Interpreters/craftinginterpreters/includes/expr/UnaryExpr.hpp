@@ -10,14 +10,14 @@
 namespace fflang {
     class UnaryExpr : public Expr {
         public:
-            UnaryExpr(const Token& token , std::unique_ptr<Expr> expr)
+            UnaryExpr(const Token& token , std::shared_ptr<Expr> expr)
                 : token(token) , expr(std::move(expr)) {}; 
             ~UnaryExpr()  = default ;
 
             void accept(Expr::Vistor& vistor) const  ;
 
             const Token token;
-            const std::unique_ptr<Expr> expr;
+            const std::shared_ptr<Expr> expr;
 
     };
 }
