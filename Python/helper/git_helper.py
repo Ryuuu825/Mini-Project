@@ -72,10 +72,18 @@ if argv.branch is not None:
     current_branch = argv.branch
 
 if argv.status is True:
+    print("Repo name: ", colorize("green") , repo_name , colorize("reset"))
+    print("Current branch: ", colorize("green") , current_branch , colorize("reset"))
+    print("Remotes: ", colorize("green") , remote_name , colorize("reset"))
+    print("Git path: ", colorize("green") , git_path , colorize("reset"))
+    print(f"{colorize('reset')}{'-'*15}")
     for remote in remote_name:
-        print(f"Status of {remote}")
+        print(f"Status of [{remote}]" , colorize("yellow") )
         subprocess.call(f"git -C {git_path} remote show {remote}", shell=True)
-        print()
+        print(f"{colorize('reset')}{'-'*15}")
+    print("Changes: ", colorize("red"))
+    subprocess.call(f"git -C {git_path} status | grep 'modified' ", shell=True)
+    print(f"{colorize('reset')}")
     exit()
 
 if argv.push is True:
@@ -94,10 +102,10 @@ if argv.list is not None:
 
 
 if argv.commit is not None:
-    commit(argv.commit)
+    commit(argv.commit[0])
     exit()
 
 if argv.commit_push is not None:
-    commit(argv.commit_push)
+    commit(argv.commit_push[0])
     push()
     exit()
