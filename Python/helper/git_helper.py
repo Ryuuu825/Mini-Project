@@ -1,0 +1,94 @@
+import argparse
+import subprocess
+
+def colorize(color:str) -> str:
+    if color == "red":
+        return "\033[31m"
+    elif color == "green":
+        return "\033[32m"
+    elif color == "yellow":
+        return "\033[33m"
+    elif color == "blue":
+        return "\033[34m"
+    elif color == "magenta":
+        return "\033[35m"
+    elif color == "cyan":
+        return "\033[36m"
+    elif color == "white":
+        return "\033[37m"
+    elif color == "reset":
+        return "\033[0m"
+    else:
+        return ""
+
+parser = argparse.ArgumentParser(description="Push to all git remotes with one command")
+parser.add_argument("-p", "--push", help="Push to all remotes", action="store_true")
+parser.add_argument("-s", "--status", help="Show the status of all remotes", action="store_true")
+parser.add_argument("-b", "--branch", help="Specify the branch to push to. (Default current branch)", type=str)
+parser.add_argument("-l", "--list", help="List out remote / branch", type=str , choices=["r" , "remote", "b" , "branch"])
+parser.add_argument("-c" , "--commit" , help="Commit all changes" , type=str , nargs="+" )
+parser.add_argument("-cp" , "--commit_push" , help="Commit all changes and push to all remote" , type=str , nargs="+" )
+
+argv = parser.parse_args()
+
+remote_name = subprocess.check_output("git remote", shell=True).decode("utf-8").split("\n")
+remote_name.pop() # remove the last empty element
+
+git_path = subprocess.check_output("git rev-parse --show-toplevel", shell=True).decode("utf-8").strip()
+git_path = git_path.replace(" ", "\ ")
+
+repo_name = subprocess.check_output("basename -s .git `git config --get remote.origin.url`", shell=True).decode("utf-8").strip()
+
+current_branch = subprocess.check_output("git rev-parse --abbrev-ref HEAD", shell=True).decode("utf-8").strip()
+if argv.branch is not None:
+    current_branch = argv.branch
+
+if argv.status is True:
+    for remote in remote_name:
+        print(f"Status of {remote}")
+        subprocess.call(f"git -C {git_path} remote show {remote}", shell=True)
+        print()
+    exit()
+
+if argv.push is True:
+    for remote in remote_name:
+        print(f"Pushing to {colorize('green')}{remote}{colorize('reset')}")
+        if argv.branch is None:
+            subprocess.call(f"git -C {git_path} push {remote} {current_branch}", shell=True)
+        else:
+            subprocess.call(f"git -C {git_path} push {remote} {argv.branch}", shell=True)
+        print()
+    
+    exit()
+
+if argv.list is not None:
+    if argv.list == "r" or argv.list == "remote":
+        for remote in remote_name:
+            print(remote)
+    elif argv.list == "b" or argv.list == "branch":
+        # list out all the branches
+        subprocess.call(f"git -C {git_path} branch -a | cat", shell=True)
+
+    exit()
+
+if argv.commit is not None:
+    commit_message = " ".join(argv.commit)
+    subprocess.call(f"git -C {git_path} add .", shell=True)
+    subprocess.call(f"git -C {git_path} commit -m \"{commit_message}\"", shell=True)
+    exit()
+
+if argv.commit_push is not None:
+    commit_message = " ".join(argv.commit_push)
+    subprocess.call(f"git -C {git_path} add .", shell=True)
+    subprocess.call(f"git -C {git_path} commit -m \"{commit_message}\"", shell=True)
+    for remote in remote_name:
+        print(f"Pushing to {colorize('green')}{remote}{colorize('reset')}")
+        if argv.branch is None:
+            print (f"git -C {git_path} push {remote} {current_branch}")
+            # subprocess.call(f"git -C {git_path} push {remote} {current_branch}", shell=True)
+        else:
+            print (f"git -C {git_path} push {remote} {argv.branch}")
+            # subprocess.call(f"git -C {git_path} push {remote} {argv.branch}", shell=True)
+        print()
+    
+    exit()
