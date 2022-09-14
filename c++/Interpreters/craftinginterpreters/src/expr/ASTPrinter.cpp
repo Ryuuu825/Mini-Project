@@ -1,17 +1,16 @@
 #include "./expr/ASTPrinter.hpp"
 #include "./expr/alltypes.hpp"
-#include <variant>
 
-void fflang::ASTPrinter::visit_binary(const BinaryExpr& expr)
-{
-    std::cout << &expr << std::endl;
-}
-void fflang::ASTPrinter::visit_unary(const UnaryExpr& expr)
-{
-    std::cout << &expr << std::endl;
 
+void fflang::ASTPrinter::visit(const BinaryExpr& expr)
+{
+    paranthesise(  expr.token.literal , {*(expr.lhs.get())  , *(expr.rhs.get())} );
 }
-void fflang::ASTPrinter::visit_literal(const LiteralExpr& expr)
+void fflang::ASTPrinter::visit(const UnaryExpr& expr)
+{
+    paranthesise( expr.token.literal , {*(expr.expr.get())} );
+}
+void fflang::ASTPrinter::visit(const LiteralExpr& expr)
 {
     // print the literal value
     if (std::holds_alternative<int>(expr.value))
@@ -35,10 +34,9 @@ void fflang::ASTPrinter::visit_literal(const LiteralExpr& expr)
         std::cout << "unknown type" << std::endl;
     }
 }
-void fflang::ASTPrinter::visit_grouping(const GroupingExpr& expr)
+void fflang::ASTPrinter::visit(const GroupingExpr& expr)
 {
-    std::cout << &expr << std::endl;
-
+    paranthesise("group", {*(expr.expre.get())});
 }
 
 void fflang::ASTPrinter::paranthesise(const std::string& name, std::initializer_list<const Expr> exprs) 

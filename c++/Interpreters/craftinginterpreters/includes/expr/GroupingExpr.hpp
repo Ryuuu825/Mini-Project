@@ -8,8 +8,7 @@
 namespace fflang {
     class GroupingExpr : public Expr {
         public:
-            GroupingExpr(const std::shared_ptr<Expr>& expr) 
-                : expre(expr) {};
+            GroupingExpr(const std::shared_ptr<Expr>& expr);
             ~GroupingExpr()   = default ;
 
             void accept(Expr::Vistor& vistor) const  ;

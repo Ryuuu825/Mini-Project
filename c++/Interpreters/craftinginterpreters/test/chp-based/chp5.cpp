@@ -26,19 +26,20 @@ int main(void)
         new Expr.Grouping(
             new Expr.Literal(45.67)));
     */
-    // std::shared_ptr<Expr> expression = std::make_shared<BinaryExpr>(
-    //     std::make_shared<UnaryExpr>(
-    //         Token(TokenType::MINUS, "-"),
-    //         std::make_shared<LiteralExpr>(object_t(123))
-    //     ),
-    //     Token(TokenType::STAR, "*"),
-    //     std::make_shared<GroupingExpr>(
-    //         std::make_shared<LiteralExpr>(object_t(45.67))
-    //     )
-    // );
+    std::shared_ptr<Expr> expression = std::make_shared<BinaryExpr>(
+        std::make_shared<UnaryExpr>(
+            Token(TokenType::MINUS, "-"),
+            std::make_shared<LiteralExpr>(object_t(123))
+        ),
+        Token(TokenType::STAR, "*"),
+        std::make_shared<GroupingExpr>(
+            std::make_shared<LiteralExpr>(object_t(45.67))
+        )
+    );
 
-    std::shared_ptr<Expr> expression = std::make_shared<LiteralExpr>(object_t(45.67));
     fflang::Expr::Vistor* vistor = new fflang::ASTPrinter(); 
+    auto r = typeid (*expression).name();
+    std::cout << r << std::endl;
     expression->accept(*vistor);
     return 0;
 }
