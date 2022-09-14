@@ -30,10 +30,9 @@ def get_repo_http_url(remote):
         url = url.replace(".git", "")
     return url
 
-def commit():
-    commit_message = " ".join(argv.commit)
+def commit(commit_msg):
     subprocess.call(f"git -C {git_path} add .", shell=True)
-    subprocess.call(f"git -C {git_path} commit -m \"{commit_message}\"", shell=True)
+    subprocess.call(f"git -C {git_path} commit -m \"{commit_msg}\"", shell=True)
 
 def push():
     for remote in remote_name:
@@ -95,10 +94,10 @@ if argv.list is not None:
 
 
 if argv.commit is not None:
-    commit()
+    commit(argv.commit)
     exit()
 
 if argv.commit_push is not None:
-    commit()
+    commit(argv.commit_push)
     push()
     exit()
