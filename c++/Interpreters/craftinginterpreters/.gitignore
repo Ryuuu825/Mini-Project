@@ -1,9 +1,7 @@
-test/**
 build/**
 .vscode/**
 *.o
 *.so
-*.o
-*.out 
 fflang
 main
+**.dSYM/**

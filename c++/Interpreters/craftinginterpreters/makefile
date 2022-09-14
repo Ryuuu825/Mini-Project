@@ -1,8 +1,23 @@
-main: interpeter
-	g++ fflang.cpp ./build/interpeter/*.o -std=c++20 -o fflang -Wall
+CC:=g++
+CFLAGS:=-Wall -Wextra -Werror -std=c++17 -O2 -g -I./includes -DDebug -DTEST
+cppfiles:=./src/**/*.cpp ./src/*.cpp
+builddir:=./build/interpeter
+objfiles:=$(builddir)/*.o
+app:=fflang
+main:=./$(app).cpp
 
-interpeter:
-	g++ -c ./src/*.cpp -DDebug -std=c++20 && mkdir -p ./build/interpeter && mv *.o ./build/interpeter/
+main:  interpeter
+	$(CC) $(CFLAGS) $(main) $(objfiles)  -o fflang
+
+interpeter:  ./src/*.cpp
+	$(CC) $(CFLAGS) -c $(cppfiles) 
+	mkdir -p $(builddir)
+	mv *.o $(builddir)
 
 clean:
-	find ./build/interpeter -type f -name "*.o" -delete
+	find $(builddir) -type f -name "*.o" -delete
+	find ./$(app).dSYM -type f -delete
+	find . -type f -name $(app) -delete
+
+test: interpeter
+	$(MAKE) -C test/chp-based all
