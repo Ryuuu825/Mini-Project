@@ -34,6 +34,9 @@ def commit(commit_msg):
     subprocess.call(f"git -C {git_path} add .", shell=True)
     subprocess.call(f"git -C {git_path} commit -m \"{commit_msg}\"", shell=True)
 
+def git_add():
+    subprocess.call(f"git -C {git_path} add .", shell=True)
+
 def push():
     for remote in remote_name:
         print(f"Pushing to remote {colorize('green')}{remote}{colorize('reset')}")
@@ -55,6 +58,7 @@ parser.add_argument("-b", "--branch", help="Specify the branch to push to. (Defa
 parser.add_argument("-l", "--list", help="List out remote / branch", type=str , choices=["r" , "remote", "b" , "branch"])
 parser.add_argument("-c" , "--commit" , help="Commit all changes" , type=str , nargs="+" )
 parser.add_argument("-cp" , "--commit_push" , help="Commit all changes and push to all remote" , type=str , nargs="+" )
+parser.add_argument("-a" , "--all" , help="All. Add, Commit, Push" , type=str , nargs="+" )
 
 
 argv = parser.parse_args( args=None if sys.argv[1:] else ['--help'])
@@ -107,5 +111,11 @@ if argv.commit is not None:
 
 if argv.commit_push is not None:
     commit(argv.commit_push[0])
+    push()
+    exit()
+
+if argv.all is not None:
+    git_add()
+    commit(argv.all[0])
     push()
     exit()
