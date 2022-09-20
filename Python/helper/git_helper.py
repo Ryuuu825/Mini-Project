@@ -77,14 +77,27 @@ if argv.branch is not None:
 
 if argv.status is True:
     print("Repo name: ", colorize("green") , repo_name , colorize("reset"))
+
     print("Current branch: ", colorize("green") , current_branch , colorize("reset"))
+
     print("Remotes: ", colorize("green") , remote_name , colorize("reset"))
+    
+    all_local_branches = subprocess.check_output("git branch", shell=True).decode("utf-8").split("\n")
+    all_local_branches.pop() # remove the last empty element
+    print("Branches: ", colorize("green") , all_local_branches , colorize("reset"))
+    
     print("Git path: ", colorize("green") , git_path , colorize("reset"))
+    
     print(f"{colorize('reset')}{'-'*15}")
+    subprocess.call(f"git -C {git_path} fetch", shell=True)
+    print(colorize("yellow") , subprocess.check_output("git status" , shell=True).decode("utf-8").split("\n")[1] , colorize("reset"))
+    print(f"{colorize('reset')}{'-'*15}")
+    
     for remote in remote_name:
-        print(f"Status of [{remote}]" , colorize("yellow") )
+        print(f"Status of [{remote}]" , "(" , get_repo_http_url(remote), ")" , colorize("yellow") )
         subprocess.call(f"git -C {git_path} remote show {remote}", shell=True)
         print(f"{colorize('reset')}{'-'*15}")
+    
     print("Changes: ", colorize("red"))
     subprocess.call(f"git -C {git_path} status | grep 'modified' ", shell=True)
     print(f"{colorize('reset')}")
