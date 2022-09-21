@@ -18,7 +18,6 @@ def filter_files(file):
     else:
         return file.endswith(pattern) and file != argv.name + pattern
 
-
 all_files = []
 if argv.recursive:
     # add all files to the list
@@ -57,15 +56,25 @@ def create_new_ipynb_file(file):
         with open(f"{argv.name}.ipynb", "w") as f:
             json.dump(new_ipynb, f)
 
+def create_markdown_cells(title):
+    # create a markdown cell
+    return {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# " + title.split("/")[-1].split(".")[0]
+        ]
+    }
 
 def append_cells_to_all_ipynb_file(file):
     # append all the cells from the file(argument) to the f"{argv.name}.ipynb file
     all_cells = get_all_cells(file)
     with open(f"{argv.name}.ipynb", "r") as f:
         data = json.load(f)
+        data["cells"].append(create_markdown_cells(file))
         data["cells"] += all_cells
         with open(f"{argv.name}.ipynb", "w") as f:
-            json.dump(data, f)
+            json.dump(data, f, indent=4)
 
 if not os.path.exists( f"{argv.name}.ipynb"):
     create_new_ipynb_file(all_files[0])
