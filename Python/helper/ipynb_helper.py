@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description="Put all .ipynb files in the curren
 parser.add_argument("-n", "--name", help="Name of the new .ipynb file", type=str, default= "all")
 parser.add_argument("-r", "--recursive", help="Include all subdirectories", action="store_true")
 parser.add_argument("-i", "--ignore", help="Ignore files", type=str, nargs="+")
+parser.add_argument("-d", "--dir", help="Directory to search", type=str, default= "." )
 argv = parser.parse_args()
 
 pattern = ".ipynb"
@@ -21,12 +22,12 @@ def filter_files(file):
 all_files = []
 if argv.recursive:
     # add all files to the list
-    for root, dirs, files in os.walk(os.getcwd()):
+    for root, dirs, files in os.walk(os.getcwd() if argv.dir == "." else argv.dir):
         for file in files:
             if filter_files(file):
                 all_files.append(os.path.join(root, file))
 else:
-    all_files = [ file for file in os.listdir ( os.getcwd () ) if filter_files(file)]
+    all_files = [ file for file in os.listdir ( os.getcwd() if argv.dir == "." else argv.dir) if filter_files(file)]
 
 all_files.sort()
     
