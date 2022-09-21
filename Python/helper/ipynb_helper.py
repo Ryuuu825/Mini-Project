@@ -28,6 +28,7 @@ if argv.recursive:
 else:
     all_files = [ file for file in os.listdir ( os.getcwd () ) if filter_files(file)]
 
+all_files.sort()
     
 if len(all_files) == 0:
     print("No .ipynb file found")
