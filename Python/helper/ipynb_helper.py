@@ -4,7 +4,7 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser(description="Put all .ipynb files in the current directory into a single .ipynb file called ipynb file")
-parser.add_argument("-n", "--name", help="Name of the new .ipynb file", type=str, default= "all.ipynb")
+parser.add_argument("-n", "--name", help="Name of the new .ipynb file", type=str, default= "all")
 parser.add_argument("-r", "--recursive", help="Include all subdirectories", action="store_true")
 parser.add_argument("-i", "--ignore", help="Ignore files", type=str, nargs="+")
 argv = parser.parse_args()
