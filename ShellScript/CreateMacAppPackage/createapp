@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+APPNAME=${2:-$(basename "${1}" '.sh')};
+echo "App name: ${APPNAME}"
+
+URL="https://"${4:-$(basename "${2}" '.sh')};
+echo "URL: ${URL}"
+
+echo "Creating app..."
+
+if [ -a "${APPNAME}.app" ]; then
+    echo "App already exists";
+    echo "Overwrite? [y/n]"
+    read -r OVERWRITE
+    if [ "$OVERWRITE" != "y" ]; then
+        echo "Aborting";
+        exit 1;
+    fi;
+fi;
+
+
+# if neu is not installed, install it
+if ! command -v neu &> /dev/null
+then
+    echo "neu could not be found, installing..."
+    npm i -g @neutralinojs/neu > /dev/null
+fi
+
+# ./output
+
+echo "[INFO] Creating the .app file..."
+DIR="output/${APPNAME}.app/Contents/MacOS";
+mkdir -p "${DIR}";
+mkdir -p "output/${APPNAME}.app/Contents/Resources"
+
+mkdir -p output
+cd output
+
+
+# create the app
+echo "[INFO] Creating Neutralinojs app..."
+neu create "${APPNAME}"  > /dev/null
+cd "${APPNAME}"
+rm -rf .github .gitignore README.md 
+cd ./resources
+rm -rf index.html styles.css ./icons/logo.gif ./icons/trayicon.png ./js/main.js
+
+# ./output/${APPNAME}
+cd ..
+
+# Change the content of "url": "/" to "url" : ${url} from meutralino.config.json and change all / to # in the cmd
+echo "[INFO] Overwriting config..."
+sed -i '' 's#"url": "/"#"url": "'"${URL}"'"#g' ./neutralino.config.json
+
+echo "[INFO] Trying to run the app, auto-kill in 3 seconds..."
+neu run > /dev/null &
+sleep 3
+killall -9 neutralino-mac_x64
+
+echo "[INFO] Building the Neutralinojs app..."
+neu build --release > /dev/null
+cd ./dist
+unzip -o "${APPNAME}-release.zip" > /dev/null
+
+
+echo "[INFO] Moving files..."
+mv "./${APPNAME}-mac_x64" "../../${APPNAME}.app/Contents/MacOS/${APPNAME}"
+mv "./resources.neu" "../../${APPNAME}.app/Contents/MacOS/resources.neu"
+
+cd ../../ # ./output
+echo "[INFO] Cleaning up..."
+rm -rf "${APPNAME}"
+
+# get the icon from Internet
+echo "[INFO] Getting the icon..."
+curl -s ${URL} | sed -n 's/.*<link rel="shortcut icon" href="\([^"]*\).*/\1/p' > icon.txt
+ICON=$(cat icon.txt)
+rm icon.txt
+if [ -z "$ICON" ]; then
+    echo "[INFO] No icon found from given URL, don't use any icon"
+else
+    echo "[INFO] Icon found: ${ICON}"
+    curl -s -o "./app.icns" "${ICON}" 
+    # Change the color of the text
+    echo -e "\033[1;32m"
+    echo "[HELP] Please follow the instructions below to set the icon"
+    echo "[HELP] 1. Select app.icns, press Command + C"
+    echo "[HELP] 2. Right click on the app, click Get Info"
+    echo "[HELP] 3. Click the icon on the top left corner"
+    echo "[HELP] 4. Press Command + V"
+    echo -e "\033[0m"
+fi
+
+
+echo "[INFO] Done!"
+open .
