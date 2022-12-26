@@ -1,20 +1,44 @@
 #!/usr/bin/env bash
 
+USAGE="Usage: createapp -n <appname> -u <url> -i <icon>"
+
+if [ "$#" -lt 1 ]; then
+    echo "$USAGE"
+    exit 1
+fi
+
+USER_PWD=$(pwd)
+cd ~
+
+# check if CreateApp directory exists
+if [ ! -d "CreateApp" ]; then
+    echo "[ERROR] CreateApp directory not found, creating..."
+    mkdir CreateApp
+fi
+
+cd $HOME/CreateApp
+
 APPNAME=${2:-$(basename "${1}" '.sh')};
+mkdir -p "${APPNAME}"
+cd "./${APPNAME}"
 echo "App name: ${APPNAME}"
 
 URL="https://"${4:-$(basename "${2}" '.sh')};
 echo "URL: ${URL}"
-
 echo "Creating app..."
+echo ""
+
 
 if [ -a "${APPNAME}.app" ]; then
-    echo "App already exists";
+    echo "[ERROR]  App already exists";
     echo "Overwrite? [y/n]"
     read -r OVERWRITE
     if [ "$OVERWRITE" != "y" ]; then
         echo "Aborting";
         exit 1;
+    else 
+        rm -rf "${APPNAME}.app"
+        rm -rf "${APPNAME}"
     fi;
 fi;
 
@@ -29,12 +53,9 @@ fi
 # ./output
 
 echo "[INFO] Creating the .app file..."
-DIR="output/${APPNAME}.app/Contents/MacOS";
+DIR="${APPNAME}.app/Contents/MacOS";
 mkdir -p "${DIR}";
-mkdir -p "output/${APPNAME}.app/Contents/Resources"
-
-mkdir -p output
-cd output
+mkdir -p "${APPNAME}.app/Contents/Resources"
 
 
 # create the app
@@ -45,12 +66,50 @@ rm -rf .github .gitignore README.md
 cd ./resources
 rm -rf index.html styles.css ./icons/logo.gif ./icons/trayicon.png ./js/main.js
 
-# ./output/${APPNAME}
+# ./${APPNAME}
 cd ..
 
 # Change the content of "url": "/" to "url" : ${url} from meutralino.config.json and change all / to # in the cmd
 echo "[INFO] Overwriting config..."
 sed -i '' 's#"url": "/"#"url": "'"${URL}"'"#g' ./neutralino.config.json
+# "exitProcessOnClose": false to true
+sed -i '' 's#"exitProcessOnClose": false#"exitProcessOnClose": true#g' ./neutralino.config.json
+# Change the 
+# "width": 800,
+# "height": 500,
+# to    
+# "width": 1280,
+# "height": 720,
+sed -i '' 's/"width": 800,/"width": 1280,/g' ./neutralino.config.json
+sed -i '' 's/"height": 500,/"height": 720,/g' ./neutralino.config.json
+# "icon": "/resources/icons/appIcon.png",
+
+# get the icon from Internet
+echo "[INFO] Getting the icon..."
+# see if user has provided an icon
+if [ -z "$6" ]; then
+    echo "[INFO] No icon provided, trying to get the icon from the URL..."
+    curl -s ${URL} | sed -n 's/.*<link rel="shortcut icon" href="\([^"]*\).*/\1/p' > icon.txt
+    ICON=$(cat icon.txt)
+    rm icon.txt
+    if [ -z "$ICON" ]; then
+        echo "[INFO] No icon found from given URL, please set the icon manually"
+    else
+        echo "[INFO] Icon found: ${ICON}"
+        curl -s -o "./app.icns" "${ICON}" 
+        cp "./app.icns" "../${APPNAME}.app/Contents/Resources/app.icns"
+        cp "./app.icns" "./resources/icons/appIcon.png"
+        cp "./app.icns" "../icon.png"
+        # Change the color of the text
+    fi
+else
+    echo "[INFO] Icon provided, using it..."
+    ICON=${6:-$(basename "${3}" '.sh')};
+    cp ${USER_PWD}/${ICON} "../${APPNAME}.app/Contents/Resources/app.icns"
+    cp ${USER_PWD}/${ICON} "./resources/icons/appIcon.png"
+    cp ${USER_PWD}/${ICON} "../app.png"
+fi
+
 
 echo "[INFO] Trying to run the app, auto-kill in 3 seconds..."
 neu run > /dev/null &
@@ -71,25 +130,15 @@ cd ../../ # ./output
 echo "[INFO] Cleaning up..."
 rm -rf "${APPNAME}"
 
-# get the icon from Internet
-echo "[INFO] Getting the icon..."
-curl -s ${URL} | sed -n 's/.*<link rel="shortcut icon" href="\([^"]*\).*/\1/p' > icon.txt
-ICON=$(cat icon.txt)
-rm icon.txt
-if [ -z "$ICON" ]; then
-    echo "[INFO] No icon found from given URL, don't use any icon"
-else
-    echo "[INFO] Icon found: ${ICON}"
-    curl -s -o "./app.icns" "${ICON}" 
-    # Change the color of the text
-    echo -e "\033[1;32m"
-    echo "[HELP] Please follow the instructions below to set the icon"
-    echo "[HELP] 1. Select app.icns, press Command + C"
-    echo "[HELP] 2. Right click on the app, click Get Info"
-    echo "[HELP] 3. Click the icon on the top left corner"
-    echo "[HELP] 4. Press Command + V"
-    echo -e "\033[0m"
-fi
+
+
+echo -e "\033[1;32m"
+echo "[HELP] Please follow the instructions below to set the icon"
+echo "[HELP] 1. Select icon photo file, press Command + C"
+echo "[HELP] 2. Right click on the app, click Get Info"
+echo "[HELP] 3. Click the icon on the top left corner"
+echo "[HELP] 4. Press Command + V"
+echo -e "\033[0m"
 
 
 echo "[INFO] Done!"
